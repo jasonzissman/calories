@@ -1,0 +1,25 @@
+{
+  "name": "calories",
+  "version": "1.0.0",
+  "description": "A simple calorie counter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonzissman/calories.git"
+  },
+  "keywords": [
+    "calorie",
+    "counter",
+    "health",
+    "healthy"
+  ],
+  "author": "jason zissman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jasonzissman/calories/issues"
+  },
+  "homepage": "https://github.com/jasonzissman/calories#readme"
+}
