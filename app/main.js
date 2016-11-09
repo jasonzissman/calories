@@ -2,7 +2,9 @@ var itemNameInput;
 var itemCaloriesInput;
 var itemsTable;
 var totalAmountSpan;
+var dateBox;
 var allItems = {};
+var mapOfItemsToCalories = {};
 
 generateGuid = function() {
     var S4 = function() {
@@ -28,6 +30,7 @@ deleteItem = function(itemId) {
             var localStorageKey = getLocalStorageKey();
             localStorage.setItem(localStorageKey, JSON.stringify(allItems));
             drawTodaysItemsToScreen();
+            loadAutocompleteLibrary();
             break;
         }
     }
@@ -60,8 +63,25 @@ drawTodaysItemsToScreen = function() {
             totalCalories += Number(todaysItems[i].calories);
         }
     }
+
     totalAmountSpan.innerHTML = totalCalories;
+    dateBox.innerHTML = new Date().toDateString();
 };
+
+loadAutocompleteLibrary = function() {
+    mapOfItemsToCalories = {};
+    Object.keys(allItems).forEach(function(key,index) {
+        var thatDaysItems = allItems[key];
+        if (thatDaysItems){
+            for(var i=0; i<thatDaysItems.length; i++) {
+                mapOfItemsToCalories[thatDaysItems[i].name] = thatDaysItems[i].calories;
+            }
+        }
+    });
+    new Awesomplete(itemNameInput, {
+        list: Object.keys(mapOfItemsToCalories)
+    });
+}
 
 window.onload = function () { 
 
@@ -74,6 +94,7 @@ window.onload = function () {
     itemCaloriesInput = document.getElementById("calorie-drop-down");
     itemsTable = document.getElementById("calories-list");
     totalAmountSpan = document.getElementById("total-amount");
+    dateBox = document.getElementById("date-box");
 
     // Read all items from local storage
     var localStorageKey = getLocalStorageKey();
@@ -85,18 +106,7 @@ window.onload = function () {
     drawTodaysItemsToScreen();
 
     // Load auto-complete library
-    var mapOfItemsToCalories = {};
-    Object.keys(allItems).forEach(function(key,index) {
-        var thatDaysItems = allItems[key];
-        if (thatDaysItems){
-            for(var i=0; i<thatDaysItems.length; i++) {
-                mapOfItemsToCalories[thatDaysItems[i].name] = thatDaysItems[i].calories;
-            }
-        }
-    });
-    new Awesomplete(itemNameInput, {
-        list: Object.keys(mapOfItemsToCalories)
-    });
+    loadAutocompleteLibrary();
 
     // Auto-populate the 'calories' drop down if they choose an auto-completed item.
     itemNameInput.addEventListener('awesomplete-selectcomplete', function(e){
@@ -120,7 +130,7 @@ window.onload = function () {
         if (!allItems[getTodaysValuesKey()]) {
             allItems[getTodaysValuesKey()] = [];
         }
-        allItems[getTodaysValuesKey()].push({
+        allItems[getTodaysValuesKey()].unshift({
             "id": generateGuid(),
             "name": itemName,
             "calories": itemCalories
@@ -130,5 +140,8 @@ window.onload = function () {
         debugger;
         localStorage.setItem(localStorageKey, allItemsJsonString);
         drawTodaysItemsToScreen();
+        loadAutocompleteLibrary();
+        itemNameInput.value = '';
+        itemCaloriesInput.selectedIndex = 0;
     };
 }
