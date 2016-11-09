@@ -1,0 +1,81 @@
+body {
+    background-color: lightblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: x-large;
+    margin: 0;
+}
+.header {
+    text-align: center;
+    background-color: #5d88c6;
+    color: white;
+    font-size: xx-large;
+    padding: 0.5em;
+}
+.content {
+    padding: 1em .5em;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.top-row {
+    width: 100%;
+}
+.input-box {
+    background-color: white;
+    width: 100%;
+}
+.button-holder {
+    margin-top: .5em;
+    width: 100%;
+    text-align: right;
+}
+.add-button {
+    background-color: #5d88c6;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer;
+}
+.text-box-holder {
+    display: inline-block;
+    border-right: 1px solid #999999;
+    padding-right: .5em;
+    width: 70%;
+}
+.text-box-holder input {
+    border: none;
+    outline: none;
+    font-size: x-large;
+    padding: 5px;
+    width: 100%;
+}
+.calorie-drop-down {
+    display: inline-block;
+    border: none;
+    outline: none;
+    width: 60px;
+    -webkit-appearance: none;
+    text-align: center;
+    font-size: x-large;
+    padding: 5px;
+}
+.calories-list-container {
+    width: 100%;
+}
+.calories-list {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0;
+}
+.calories-list td {
+    font-size: x-large;
+}
+.calories-list td.item-calories{
+    padding-left: .5em;
+}
+.totals-row {
+    margin-top: .5em;
+    text-align: right;
+    font-size: xx-large;
+    font-weight: bold;
+}
