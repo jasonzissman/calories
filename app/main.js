@@ -84,9 +84,32 @@ window.onload = function () {
     
     drawTodaysItemsToScreen();
 
-    // Load auto-complete library    
+    // Load auto-complete library
+    var mapOfItemsToCalories = {};
+    Object.keys(allItems).forEach(function(key,index) {
+        var thatDaysItems = allItems[key];
+        if (thatDaysItems){
+            for(var i=0; i<thatDaysItems.length; i++) {
+                mapOfItemsToCalories[thatDaysItems[i].name] = thatDaysItems[i].calories;
+            }
+        }
+    });
     new Awesomplete(itemNameInput, {
-        list: ["Pizza", "Apple", "Banana", "Pear", "Burger", "Coffee", "Peach"]
+        list: Object.keys(mapOfItemsToCalories)
+    });
+
+    // Auto-populate the 'calories' drop down if they choose an auto-completed item.
+    itemNameInput.addEventListener('awesomplete-selectcomplete', function(e){
+        var currentItemName = itemNameInput.value;
+        var caloriesForCurrentItem = mapOfItemsToCalories[currentItemName];
+        if(caloriesForCurrentItem) {
+            for (var i=0; i<itemCaloriesInput.length; i++){
+                if(itemCaloriesInput.options[i].value === caloriesForCurrentItem) {
+                    itemCaloriesInput.selectedIndex = i;
+                    break;
+                }
+            }
+        }
     });
 
     // Set up click handler for button
