@@ -2,7 +2,7 @@ var itemNameInput;
 var itemCaloriesInput;
 var itemsTable;
 var totalAmountSpan;
-var currentItems = [];
+var allItems = {};
 
 generateGuid = function() {
     var S4 = function() {
@@ -11,34 +11,40 @@ generateGuid = function() {
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
 
-getTodaysLocalStorageKey = function() {
+getLocalStorageKey = function() {
+    return "jz-calories-counter";
+}
+
+getTodaysValuesKey = function() {
     var today = new Date();
     var key = today.getFullYear() + "" + (today.getMonth() + 1) + "" + today.getDate();
     return key;
 }
 
 deleteItem = function(itemId) {
-    for(var j=0; j<currentItems.length; j++) {
-        if (currentItems[j].id === itemId) {
-            currentItems.splice(j, 1);
-            var currentDayString = getTodaysLocalStorageKey();
-            localStorage.setItem(currentDayString, JSON.stringify(currentItems));
-            drawCurrentItemsToScreen();
+    for(var j=0; j<allItems[getTodaysValuesKey()].length; j++) {
+        if (allItems[getTodaysValuesKey()][j].id === itemId) {
+            allItems[getTodaysValuesKey()].splice(j, 1);
+            var localStorageKey = getLocalStorageKey();
+            localStorage.setItem(localStorageKey, JSON.stringify(allItems));
+            drawTodaysItemsToScreen();
             break;
         }
     }
 };
 
-drawCurrentItemsToScreen = function() {
+drawTodaysItemsToScreen = function() {
 
     itemsTable.innerHTML = "";
     var totalCalories = 0;
-    if(currentItems && currentItems.length > 0) {
-        for(var i=0; i<currentItems.length; i++) {
+    var todaysItems = allItems[getTodaysValuesKey()];
 
-            var htmlToAdd = '<tr id="' + currentItems[i].id + '" title="Click to remove item">' + 
-            '<td class="item-name">' + currentItems[i].name + '</td>' + 
-            '<td class="item-calories">' + currentItems[i].calories + '</td>' +
+    if(todaysItems && todaysItems.length > 0) {
+        for(var i=0; i<todaysItems.length; i++) {
+
+            var htmlToAdd = '<tr id="' + todaysItems[i].id + '" title="Click to remove item">' + 
+            '<td class="item-name">' + todaysItems[i].name + '</td>' + 
+            '<td class="item-calories">' + todaysItems[i].calories + '</td>' +
             '</tr>';
             itemsTable.innerHTML += htmlToAdd;
 
@@ -49,9 +55,9 @@ drawCurrentItemsToScreen = function() {
                         deleteItem(itemId);
                     };
                 }, 250);
-            })(currentItems[i].id);
+            })(todaysItems[i].id);
 
-            totalCalories += Number(currentItems[i].calories);
+            totalCalories += Number(todaysItems[i].calories);
         }
     }
     totalAmountSpan.innerHTML = totalCalories;
@@ -69,14 +75,14 @@ window.onload = function () {
     itemsTable = document.getElementById("calories-list");
     totalAmountSpan = document.getElementById("total-amount");
 
-    // Read current items for the day from local storage
-    var currentDayString = getTodaysLocalStorageKey();
-    var itemsFromLocalStorage = localStorage.getItem(currentDayString);
+    // Read all items from local storage
+    var localStorageKey = getLocalStorageKey();
+    var itemsFromLocalStorage = localStorage.getItem(localStorageKey);
     if(itemsFromLocalStorage) {
-        currentItems = JSON.parse(itemsFromLocalStorage);
+        allItems = JSON.parse(itemsFromLocalStorage);
     }
     
-    drawCurrentItemsToScreen();
+    drawTodaysItemsToScreen();
 
     // Load auto-complete library    
     new Awesomplete(itemNameInput, {
@@ -88,13 +94,18 @@ window.onload = function () {
     addButton.onclick = function() {
         var itemName = itemNameInput.value;
         var itemCalories = itemCaloriesInput.value;
-        currentItems.push({
+        if (!allItems[getTodaysValuesKey()]) {
+            allItems[getTodaysValuesKey()] = [];
+        }
+        allItems[getTodaysValuesKey()].push({
             "id": generateGuid(),
             "name": itemName,
             "calories": itemCalories
         });
-        var currentDayString = getTodaysLocalStorageKey();
-        localStorage.setItem(currentDayString, JSON.stringify(currentItems));
-        drawCurrentItemsToScreen();
+        var localStorageKey = getLocalStorageKey();
+        var allItemsJsonString = JSON.stringify(allItems);
+        debugger;
+        localStorage.setItem(localStorageKey, allItemsJsonString);
+        drawTodaysItemsToScreen();
     };
 }
