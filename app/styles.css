@@ -53,7 +53,7 @@ body {
     display: inline-block;
     border: none;
     outline: none;
-    width: 60px;
+    min-width: 60px;
     -webkit-appearance: none;
     text-align: center;
     font-size: x-large;
@@ -66,6 +66,12 @@ body {
     text-align: right;
     margin-left: auto;
     margin-right: 0;
+}
+.calories-list tr {
+    cursor: pointer;
+}
+.calories-list tr:hover {
+    background-color: #9dc8d6;
 }
 .calories-list td {
     font-size: x-large;

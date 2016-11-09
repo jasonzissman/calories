@@ -4,11 +4,30 @@ var itemsTable;
 var totalAmountSpan;
 var currentItems = [];
 
+generateGuid = function() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
 getTodaysLocalStorageKey = function() {
     var today = new Date();
     var key = today.getFullYear() + "" + (today.getMonth() + 1) + "" + today.getDate();
     return key;
 }
+
+deleteItem = function(itemId) {
+    for(var j=0; j<currentItems.length; j++) {
+        if (currentItems[j].id === itemId) {
+            currentItems.splice(j, 1);
+            var currentDayString = getTodaysLocalStorageKey();
+            localStorage.setItem(currentDayString, JSON.stringify(currentItems));
+            drawCurrentItemsToScreen();
+            break;
+        }
+    }
+};
 
 drawCurrentItemsToScreen = function() {
 
@@ -16,18 +35,30 @@ drawCurrentItemsToScreen = function() {
     var totalCalories = 0;
     if(currentItems && currentItems.length > 0) {
         for(var i=0; i<currentItems.length; i++) {
-            var htmlToAdd = '<tr>' + 
+
+            var htmlToAdd = '<tr id="' + currentItems[i].id + '" title="Click to remove item">' + 
             '<td class="item-name">' + currentItems[i].name + '</td>' + 
             '<td class="item-calories">' + currentItems[i].calories + '</td>' +
             '</tr>';
             itemsTable.innerHTML += htmlToAdd;
+
+            // Set up click handler to delete when pressed
+            (function (itemId) {
+                setTimeout(function() {
+                    document.getElementById(itemId).onclick = function() {
+                        deleteItem(itemId);
+                    };
+                }, 250);
+            })(currentItems[i].id);
+
             totalCalories += Number(currentItems[i].calories);
         }
-        totalAmountSpan.innerHTML = totalCalories;
     }
+    totalAmountSpan.innerHTML = totalCalories;
 };
 
 window.onload = function () { 
+
     if (typeof (Storage) === "undefined") {
         alert("This website requires HTML5 Local storage to work.  Your browser does not appear to support it.");
         return;
@@ -58,6 +89,7 @@ window.onload = function () {
         var itemName = itemNameInput.value;
         var itemCalories = itemCaloriesInput.value;
         currentItems.push({
+            "id": generateGuid(),
             "name": itemName,
             "calories": itemCalories
         });
@@ -65,6 +97,4 @@ window.onload = function () {
         localStorage.setItem(currentDayString, JSON.stringify(currentItems));
         drawCurrentItemsToScreen();
     };
-
-
 }
