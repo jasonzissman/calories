@@ -4,29 +4,29 @@ var itemsTable;
 var totalAmountSpan;
 var dateBox;
 var allItems = {};
-var mapOfItemsToCalories = {};
 
 generateGuid = function() {
     var S4 = function() {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-}
+};
 
 getLocalStorageKey = function() {
     return "jz-calories-counter";
-}
+};
 
-getTodaysValuesKey = function() {
+getTodaysMapKey = function() {
     var today = new Date();
     var key = today.getFullYear() + "" + (today.getMonth() + 1) + "" + today.getDate();
     return key;
-}
+};
 
 deleteItem = function(itemId) {
-    for(var j=0; j<allItems[getTodaysValuesKey()].length; j++) {
-        if (allItems[getTodaysValuesKey()][j].id === itemId) {
-            allItems[getTodaysValuesKey()].splice(j, 1);
+    var todaysMapKey = getTodaysMapKey();
+    for(var j=0; j<allItems[todaysMapKey].length; j++) {
+        if (allItems[todaysMapKey][j].id === itemId) {
+            allItems[todaysMapKey].splice(j, 1);
             var localStorageKey = getLocalStorageKey();
             localStorage.setItem(localStorageKey, JSON.stringify(allItems));
             drawTodaysItemsToScreen();
@@ -36,28 +36,29 @@ deleteItem = function(itemId) {
     }
 };
 
+createListItemHtml = function(item) {
+    return '<tr id="' + item.id + '" title="Click to remove item">' + 
+        '<td class="item-name">' + item.name + '</td>' + 
+        '<td class="item-calories">' + item.calories + '</td>' +
+        '</tr>';
+};
+
 drawTodaysItemsToScreen = function() {
 
     itemsTable.innerHTML = "";
     var totalCalories = 0;
-    var todaysItems = allItems[getTodaysValuesKey()];
+    var todaysItems = allItems[getTodaysMapKey()];
 
     if(todaysItems && todaysItems.length > 0) {
         for(var i=0; i<todaysItems.length; i++) {
 
-            var htmlToAdd = '<tr id="' + todaysItems[i].id + '" title="Click to remove item">' + 
-            '<td class="item-name">' + todaysItems[i].name + '</td>' + 
-            '<td class="item-calories">' + todaysItems[i].calories + '</td>' +
-            '</tr>';
-            itemsTable.innerHTML += htmlToAdd;
+            itemsTable.innerHTML += createListItemHtml(todaysItems[i]);
 
             // Set up click handler to delete when pressed
             (function (itemId) {
-                setTimeout(function() {
-                    document.getElementById(itemId).onclick = function() {
-                        deleteItem(itemId);
-                    };
-                }, 250);
+                document.getElementById(itemId).onclick = function() {
+                    deleteItem(itemId);
+                };
             })(todaysItems[i].id);
 
             totalCalories += Number(todaysItems[i].calories);
@@ -69,7 +70,7 @@ drawTodaysItemsToScreen = function() {
 };
 
 loadAutocompleteLibrary = function() {
-    mapOfItemsToCalories = {};
+    var mapOfItemsToCalories = {};
     Object.keys(allItems).forEach(function(key,index) {
         var thatDaysItems = allItems[key];
         if (thatDaysItems){
@@ -81,7 +82,21 @@ loadAutocompleteLibrary = function() {
     new Awesomplete(itemNameInput, {
         list: Object.keys(mapOfItemsToCalories)
     });
-}
+
+    // Auto-populate the 'calories' drop down if they choose an auto-completed item.
+    itemNameInput.addEventListener('awesomplete-selectcomplete', function(e){
+        var currentItemName = itemNameInput.value;
+        var caloriesForCurrentItem = mapOfItemsToCalories[currentItemName];
+        if(caloriesForCurrentItem) {
+            for (var i=0; i<itemCaloriesInput.length; i++){
+                if(itemCaloriesInput.options[i].value === caloriesForCurrentItem) {
+                    itemCaloriesInput.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+    });    
+};
 
 window.onload = function () { 
 
@@ -90,6 +105,7 @@ window.onload = function () {
         return;
     } 
 
+    // Get hooks into DOM elements
     itemNameInput = document.getElementById("food-text-box");
     itemCaloriesInput = document.getElementById("calorie-drop-down");
     itemsTable = document.getElementById("calories-list");
@@ -104,33 +120,19 @@ window.onload = function () {
     }
     
     drawTodaysItemsToScreen();
-
-    // Load auto-complete library
     loadAutocompleteLibrary();
 
-    // Auto-populate the 'calories' drop down if they choose an auto-completed item.
-    itemNameInput.addEventListener('awesomplete-selectcomplete', function(e){
-        var currentItemName = itemNameInput.value;
-        var caloriesForCurrentItem = mapOfItemsToCalories[currentItemName];
-        if(caloriesForCurrentItem) {
-            for (var i=0; i<itemCaloriesInput.length; i++){
-                if(itemCaloriesInput.options[i].value === caloriesForCurrentItem) {
-                    itemCaloriesInput.selectedIndex = i;
-                    break;
-                }
-            }
-        }
-    });
-
-    // Set up click handler for button
+    // Set up click handler for add button
     var addButton = document.getElementById("add-button");
     addButton.onclick = function() {
         var itemName = itemNameInput.value;
         var itemCalories = itemCaloriesInput.value;
-        if (!allItems[getTodaysValuesKey()]) {
-            allItems[getTodaysValuesKey()] = [];
+
+        var mapKeyForToday = getTodaysMapKey();
+        if (!allItems[mapKeyForToday]) {
+            allItems[mapKeyForToday] = [];
         }
-        allItems[getTodaysValuesKey()].unshift({
+        allItems[mapKeyForToday].unshift({
             "id": generateGuid(),
             "name": itemName,
             "calories": itemCalories
@@ -144,4 +146,4 @@ window.onload = function () {
         itemNameInput.value = '';
         itemCaloriesInput.selectedIndex = 0;
     };
-}
+};
