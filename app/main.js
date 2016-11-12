@@ -18,8 +18,13 @@ getLocalStorageKey = function() {
 
 getTodaysMapKey = function() {
     var today = new Date();
-    var key = today.getFullYear() + "" + (today.getMonth() + 1) + "" + today.getDate();
-    return key;
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+};
+
+saveUpdatedItemsToLocalStorage = function() {
+    var localStorageKey = getLocalStorageKey();
+    var allItemsAsJsonString = JSON.stringify(allItems);
+    localStorage.setItem(localStorageKey, allItemsAsJsonString);
 };
 
 deleteItem = function(itemId) {
@@ -27,8 +32,7 @@ deleteItem = function(itemId) {
     for(var j=0; j<allItems[todaysMapKey].length; j++) {
         if (allItems[todaysMapKey][j].id === itemId) {
             allItems[todaysMapKey].splice(j, 1);
-            var localStorageKey = getLocalStorageKey();
-            localStorage.setItem(localStorageKey, JSON.stringify(allItems));
+            saveUpdatedItemsToLocalStorage();
             drawTodaysItemsToScreen();
             loadAutocompleteLibrary();
             break;
@@ -56,9 +60,11 @@ drawTodaysItemsToScreen = function() {
 
             // Set up click handler to delete when pressed
             (function (itemId) {
-                document.getElementById(itemId).onclick = function() {
-                    deleteItem(itemId);
-                };
+                setTimeout(function(){
+                    document.getElementById(itemId).onclick = function() {
+                        deleteItem(itemId);
+                    };
+                }, 100);
             })(todaysItems[i].id);
 
             totalCalories += Number(todaysItems[i].calories);
@@ -98,6 +104,26 @@ loadAutocompleteLibrary = function() {
     });    
 };
 
+removeItemsOlderThanOneMonth = function(items) {
+    var todayInMs = Date.now();
+    var oneMonthInMs = 31 * 24 * 60 * 60 * 1000;
+    var keysToDelete = [];
+
+    Object.keys(allItems).forEach(function(key,index) {
+        var dateInMs = Number(key);
+        if (todayInMs - oneMonthInMs > dateInMs) {
+            console.log("Deleting key " + key + ".  TodayInMs: " + todayInMs + ", oneMonthInMs: " + oneMonthInMs + ", dateInMs: " + dateInMs);
+            keysToDelete.push(key);
+        }
+    });
+
+    for(var i=0; i<keysToDelete.length; i++) {
+        delete allItems[keysToDelete[i]];
+    }
+
+    saveUpdatedItemsToLocalStorage();
+};
+
 window.onload = function () { 
 
     if (typeof (Storage) === "undefined") {
@@ -117,6 +143,7 @@ window.onload = function () {
     var itemsFromLocalStorage = localStorage.getItem(localStorageKey);
     if(itemsFromLocalStorage) {
         allItems = JSON.parse(itemsFromLocalStorage);
+        removeItemsOlderThanOneMonth();
     }
     
     drawTodaysItemsToScreen();
@@ -137,10 +164,8 @@ window.onload = function () {
             "name": itemName,
             "calories": itemCalories
         });
-        var localStorageKey = getLocalStorageKey();
-        var allItemsJsonString = JSON.stringify(allItems);
-        debugger;
-        localStorage.setItem(localStorageKey, allItemsJsonString);
+
+        saveUpdatedItemsToLocalStorage();
         drawTodaysItemsToScreen();
         loadAutocompleteLibrary();
         itemNameInput.value = '';
