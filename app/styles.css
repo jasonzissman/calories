@@ -1,26 +1,45 @@
 body {
-    background-color: #50514F;
+    background-color: #FFFFFF;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: x-large;
     margin: 0;
     padding-bottom: 1.5em;
-    color: white;
+    color: black;
+    background-image: url("images/business-guy-3.jpg");
+    background-size: 150px 150px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
 }
 .date-box{
     text-align: center;
     font-size: medium;
-    font-weight: bold;
-    margin: .5em;
+    width: 100%;
+    text-align: right;
 }
 .header {
     text-align: center;
-    background-color: #f25f5c;
+    background-color: #990000;
     color: white;
-    font-size: xx-large;
+    font-size: x-large;
     padding: 0.5em;
 }
+.header-icon {
+    display: inline-block;
+    margin-right: 1em;
+}
+.header-icon img {
+    width: 35px;
+}
+.header-text {
+    display: inline-block;
+    text-align: right;
+}
+.header-title {
+    width: 100%;
+    text-align: right;
+}
 .content {
-    padding: .5em .5em;
+    padding: 1em;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -29,7 +48,7 @@ body {
     width: 100%;
 }
 .input-box {
-    background-color: white;
+    border: 1px solid black;
     width: 100%;
 }
 .button-holder {
@@ -38,11 +57,14 @@ body {
     text-align: right;
 }
 .add-button {
-    background-color: #f25f5c;
+    background-color: #990000;
     color: white;
     text-align: center;
-    padding: 5px;
+    padding: 2px;
     cursor: pointer;
+    width: 35%;
+    margin-left:auto; 
+    margin-right:0;
 }
 .text-box-holder {
     display: inline-block;
@@ -53,7 +75,7 @@ body {
 .text-box-holder input {
     border: none;
     outline: none;
-    font-size: x-large;
+    font-size: large;
     padding: 5px;
     width: 100%;
 }
@@ -64,10 +86,10 @@ body {
     min-width: 60px;
     -webkit-appearance: none;
     text-align: center;
-    font-size: x-large;
+    font-size: large;
     padding: 5px;
     background-color: #ffffff;
-    width: 23%;
+    width: 21%;
 }
 .calories-list-container {
     width: 100%;
@@ -87,7 +109,7 @@ body {
     font-size: x-large;
 }
 .calories-list td.item-calories{
-    padding-left: .5em;
+    padding-left: 1em;
 }
 .totals-row {
     margin-top: .5em;
