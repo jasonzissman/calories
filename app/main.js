@@ -3,6 +3,7 @@ var itemCaloriesInput;
 var itemsTable;
 var totalAmountSpan;
 var dateBox;
+var body;
 var allItems = {};
 
 generateGuid = function() {
@@ -47,6 +48,22 @@ createListItemHtml = function(item) {
         '</tr>';
 };
 
+updateBackgroundImage = function(totalCalories) {
+    if (totalCalories < 400) {
+        body.style.backgroundImage = "url('images/status-1.jpg')";
+    } else if (totalCalories < 800) {
+        body.style.backgroundImage = "url('images/status-2.jpg')";
+    } else if (totalCalories < 1200) {
+        body.style.backgroundImage = "url('images/status-3.jpg')";
+    } else if (totalCalories < 1600) {
+        body.style.backgroundImage = "url('images/status-4.jpg')";
+    } else if (totalCalories < 2000) {
+        body.style.backgroundImage = "url('images/status-5.jpg')";
+    } else {
+        body.style.backgroundImage = "url('images/status-6.jpg')";
+    }
+};
+
 drawTodaysItemsToScreen = function() {
 
     itemsTable.innerHTML = "";
@@ -73,6 +90,7 @@ drawTodaysItemsToScreen = function() {
 
     totalAmountSpan.innerHTML = totalCalories;
     dateBox.innerHTML = new Date().toDateString();
+    updateBackgroundImage(totalCalories);
 };
 
 loadAutocompleteLibrary = function() {
@@ -112,7 +130,6 @@ removeItemsOlderThanOneMonth = function(items) {
     Object.keys(allItems).forEach(function(key,index) {
         var dateInMs = Number(key);
         if (todayInMs - oneMonthInMs > dateInMs) {
-            console.log("Deleting key " + key + ".  TodayInMs: " + todayInMs + ", oneMonthInMs: " + oneMonthInMs + ", dateInMs: " + dateInMs);
             keysToDelete.push(key);
         }
     });
@@ -137,6 +154,7 @@ window.onload = function () {
     itemsTable = document.getElementById("calories-list");
     totalAmountSpan = document.getElementById("total-amount");
     dateBox = document.getElementById("date-box");
+    body = document.body;
 
     // Read all items from local storage
     var localStorageKey = getLocalStorageKey();
