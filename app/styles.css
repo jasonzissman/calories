@@ -17,32 +17,56 @@ body {
     text-align: right;
 }
 .header {
-    text-align: center;
     background-color: #990000;
     color: white;
     font-size: x-large;
     padding: 0.5em;
+    overflow: auto;    
 }
 .header-icon {
+    padding-top: .5em;
+    padding-bottom: .5em;
     display: inline-block;
-    margin-right: 1em;
+    cursor: pointer;
 }
 .header-icon img {
-    width: 35px;
+    width: 30px;
 }
 .header-text {
-    display: inline-block;
+    float: right;
     text-align: right;
 }
 .header-title {
     width: 100%;
     text-align: right;
 }
+.header-settings {
+    text-align: left;
+    padding-top: .75em;
+}
+.header-settings-option-label {
+    margin-top: .5em;
+    font-size: medium;
+}
+.header-settings-daily-calories {
+    margin-top: .25em;
+    border: none;
+    outline: none;
+    font-size: large;
+    padding: 5px;
+}
+.chevron-holder {
+    width: 100%;
+    text-align: center;
+    margin-top: .5em;
+    cursor: pointer;
+}
 .content {
     padding: 1em;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+    min-height: 50vh;
 }
 .top-row {
     width: 100%;
@@ -50,6 +74,7 @@ body {
 .input-box {
     border: 1px solid black;
     width: 100%;
+    padding-bottom: 4px;
 }
 .button-holder {
     margin-top: .5em;
@@ -70,7 +95,7 @@ body {
     display: inline-block;
     border-right: 1px solid #999999;
     padding-right: .5em;
-    width: 70%;
+    width: 68%;
 }
 .text-box-holder input {
     border: none;
@@ -89,7 +114,7 @@ body {
     font-size: large;
     padding: 5px;
     background-color: #ffffff;
-    width: 21%;
+    width: 20%;
 }
 .calories-list-container {
     width: 100%;

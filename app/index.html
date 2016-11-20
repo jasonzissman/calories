@@ -1,32 +1,56 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="awesomplete.css" />
-        <script type="text/javascript" src="awesomplete.min.js" async></script>
-        <script type="text/javascript" src="main.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div class="main-container">
-            <div class="header">
-                <div class="header-icon">
-                    <img src="images/settings-icon.png" />
+
+<head>
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="awesomplete.css" />
+	<script type="text/javascript" src="awesomplete.min.js" async></script>
+	<script type="text/javascript" src="main.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<div class="main-container">
+		<div id="header" class="header">
+			<div class="header-constant">
+				<div class="header-icon" id="header-icon">
+					<img src="images/settings-icon.png" />
+				</div>
+				<div class="header-text">
+					<div class="header-title">
+						Calorie Accountant
+					</div>
+					<div id="date-box" class="date-box">
+					</div>
+				</div>
+			</div>
+			<div id="header-settings" class="header-settings" style="display:none;">
+				<div class="header-settings-title">
+					Settings
+				</div>
+				<div class="header-settings-option-label">
+                    Daily Calories
+				</div>
+                <select class="header-settings-daily-calories" id="header-settings-daily-calories">
+                    <option value="1200">1200</option>
+                    <option value="1500">1500</option>
+                    <option value="1800">1800</option>
+                    <option value="2100">2100</option>
+                    <option value="2400">2400</option>
+                    <option value="2700">2700</option>
+                    <option value="3000">3000</option>
+                </select>
+                <div id="chevron-holder" class="chevron-holder">
+                    <img src="images/chevron-up.svg" />
                 </div>
-                <div class="header-text">
-                    <div class="header-title">
-                        Calorie Accountant
-                    </div>                    
-                    <div id="date-box" class="date-box">
-                    </div>
-                </div>
-            </div>
-            <div class="content">
-                <div class="top-row">
-                    <div class="input-box">
-                        <div class="text-box-holder">
-                            <input id="food-text-box" placeholder="Add an item..."/>
-                        </div>
-                        <select id="calorie-drop-down" class="calorie-drop-down">
+			</div>
+		</div>
+		<div class="content">
+			<div class="top-row">
+				<div class="input-box">
+					<div class="text-box-holder">
+						<input id="food-text-box" placeholder="Add an item..." />
+					</div>
+					<select id="calorie-drop-down" class="calorie-drop-down">
                             <option value="50">50</option>
                             <option value="100">100</option>
                             <option value="150">150</option>
@@ -55,30 +79,31 @@
                             <option value="1300">1300</option>
                             <option value="1350">1350</option>
                         </select>
-                    </div>
-                    <div class="button-holder">
-                        <div class="add-button" id="add-button">
-                            <span>
+				</div>
+				<div class="button-holder">
+					<div class="add-button" id="add-button">
+						<span>
                                 Add
                             </span>
-                        </div>                       
-                    </div>
-                </div>
-                <div class="displayed-calories">
-                    <div class="totals-row">
-                        <span class="total-word">   
+					</div>
+				</div>
+			</div>
+			<div class="displayed-calories">
+				<div class="totals-row">
+					<span class="total-word">   
                             Total Calories
                         </span>
-                        <span id="total-amount" class="total-amount">
+					<span id="total-amount" class="total-amount">
                             0
                         </span>
-                    </div>
-                    <div class="calories-list-container">
-                        <table cellspacing="0" id="calories-list" class="calories-list">                                                
-                        </table>                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+				</div>
+				<div class="calories-list-container">
+					<table cellspacing="0" id="calories-list" class="calories-list">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>

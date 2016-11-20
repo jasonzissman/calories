@@ -4,6 +4,7 @@ var itemsTable;
 var totalAmountSpan;
 var dateBox;
 var body;
+var headerSettings;
 var allItems = {};
 
 generateGuid = function() {
@@ -154,6 +155,7 @@ window.onload = function () {
     itemsTable = document.getElementById("calories-list");
     totalAmountSpan = document.getElementById("total-amount");
     dateBox = document.getElementById("date-box");
+    headerSettings = document.getElementById("header-settings");
     body = document.body;
 
     // Read all items from local storage
@@ -189,4 +191,15 @@ window.onload = function () {
         itemNameInput.value = '';
         itemCaloriesInput.selectedIndex = 0;
     };
+
+    // Set up click handlers for header
+    var header = document.getElementById("header-icon");
+    header.onclick = function() {
+        headerSettings.style.display = headerSettings.style.display === 'none' ? '' : 'none'
+    }
+
+    var chevronHolder = document.getElementById("chevron-holder");
+    chevronHolder.onclick = function() {
+        headerSettings.style.display = 'none';
+    }
 };
